@@ -117,7 +117,7 @@ func PullGrafanaAndCommit(client *grafana.Client, cfg *config.Config) (err error
 	dv := make(map[string]diffVersion)
 	// Load versions
 	logrus.Info("PullGrafanaAndCommit: Getting local dashboard versions")
-	fileVersionFile, err := GetDashboardsVersions(syncPath, cfg.Git.VersionsFilePrefix)
+	fileVersionFile, err := GetDashboardsVersions(syncPath, cfg.VersionFilePrefix())
 	if err != nil {
 		return err
 	}
@@ -232,7 +232,7 @@ func PullGrafanaAndCommit(client *grafana.Client, cfg *config.Config) (err error
 	} else {
 		// If we're on simple sync mode, write versions and don't do anything
 		// else.
-		if err = writeVersions(grafanaVersionFile, dv, syncPath, cfg.Git.VersionsFilePrefix); err != nil {
+		if err = writeVersions(grafanaVersionFile, dv, syncPath, cfg.VersionFilePrefix()); err != nil {
 			return err
 		}
 	}

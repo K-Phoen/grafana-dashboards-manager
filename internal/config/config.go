@@ -25,12 +25,20 @@ type Config struct {
 	Pusher     *PusherSettings     `yaml:"pusher,omitempty"`
 }
 
+func (config Config) VersionFilePrefix() string {
+	if config.Git != nil {
+		return config.Git.VersionsFilePrefix
+	}
+
+	return config.SimpleSync.VersionsFilePrefix
+}
+
 // GrafanaSettings contains the data required to talk to the Grafana HTTP API.
 type GrafanaSettings struct {
 	BaseURL      string `yaml:"base_url"`
 	APIKey       string `yaml:"api_key"`
 	Username     string `yaml:"username"`
-	Password     string `"yaml:password"`
+	Password     string `yaml:"password"`
 	IgnorePrefix string `yaml:"ignore_prefix,omitempty"`
 	SkipVerify   bool   `default:"false" yaml:"insecureSkipVerify"`
 }
@@ -40,7 +48,8 @@ type GrafanaSettings struct {
 // If both simple sync settings and Git settings are found, the Git settings
 // will be used.
 type SimpleSyncSettings struct {
-	SyncPath string `yaml:"sync_path"`
+	SyncPath           string `yaml:"sync_path"`
+	VersionsFilePrefix string `yaml:"versions_file_prefix"`
 }
 
 // GitSettings contains the data required to interact with the Git repository.
